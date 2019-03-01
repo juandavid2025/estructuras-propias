@@ -2,8 +2,8 @@ package reinado;
 
 public class OwnQueue <T>{
 
-	private Object first;
-	private Object last;
+	private Object<T> first;
+	private Object<T> last;
 	private int elements;
 	
 	public OwnQueue() {
@@ -25,10 +25,11 @@ public class OwnQueue <T>{
 		 }
 	 }
 	 
-	 public T poll() {
+	 @SuppressWarnings("unchecked")
+	public T poll() {
 		T element=null;
 		 if(elements==1) {
-			element=(T) first.getObject();
+			element= (T) first.getObject();
 			first=null;
 			last=null;
 			elements--;
@@ -42,7 +43,8 @@ public class OwnQueue <T>{
 		 return element;
 	 }
 	 
-	 public T peek() {
+	 @SuppressWarnings("unchecked")
+	public T peek() {
 		 return (T) last.getObject();
 	 }
 	 
