@@ -24,4 +24,8 @@ public class AguitaCola<T> {
 	 return arrayL.get(arrayL.size()-1);
  }
  
+ public boolean isEmpty() {
+	 return arrayL.isEmpty();
+ }
+ 
 }
