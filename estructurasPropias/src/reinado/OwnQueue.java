@@ -1,10 +1,11 @@
 package reinado;
 
+//cola mas eficiente
 public class OwnQueue <T>{
 
 	private Object<T> first;
 	private Object<T> last;
-	private int elements;
+	private long elements;
 	
 	public OwnQueue() {
 		elements=0;
@@ -56,7 +57,7 @@ public class OwnQueue <T>{
 		 }
 	 }
 	 
-	 public int size() {
+	 public long size() {
 		 return elements;
 	 }
 	 
