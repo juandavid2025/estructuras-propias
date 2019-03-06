@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Hashtable;
 
 //falta re hashing
-public class AguitaTable <T>{
+public class AguitaTable <K,T>{
 
 	public final static int STARTED_SIZE=100;
 	private double tableSize;
@@ -29,9 +29,9 @@ public class AguitaTable <T>{
 		
 	}
 	
-	public void put(T element) {
+	public void put(K key,T element) {
 		
-		int key = hash(element.hashCode());
+		int key = hash( key.hashCode());
 		
 		if(hashTable[key]==null) {
 			hashTable[key]=element;
@@ -78,7 +78,7 @@ public class AguitaTable <T>{
 		for(int i=0;i<hashTable.length;i++) {
 			if(hashTable[i]!=null) {
 				
-				
+				// y aqui como le pido la key???
 				
 			}
 		}
@@ -92,7 +92,7 @@ public class AguitaTable <T>{
 		}
 	}
 	
-	public T get(T key) {
+	public T get(K key) {
 		T value=null;
 		
 		if(numberOfKeysUsed!=0) {
@@ -109,7 +109,7 @@ public class AguitaTable <T>{
 		return value;
 	}
 	
-	public T getR(int position,T key) {
+	public T getR(int position,K key) {
 		
 		int posi=realValue(position);
 		
@@ -121,7 +121,7 @@ public class AguitaTable <T>{
 		}
 	}
 	
-	public T remove(T key) {
+	public T remove(K key) {
 		
         T value=null;
 		
@@ -144,7 +144,7 @@ public class AguitaTable <T>{
 		
 	}
 	
-	public T removeR(int position,T key) {
+	public T removeR(int position,K key) {
     
 		int posi=realValue(position);
 		
@@ -164,14 +164,15 @@ public class AguitaTable <T>{
 		}
 	}
 	
-	public boolean contains(T value) {
+	/**
+	public boolean contains(K key) {
 		boolean found=false;
+		
 		
 		
 		return found;
 	}
-	
-	
+	*/
 	
 	
 	
