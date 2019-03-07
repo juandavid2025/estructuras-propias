@@ -7,22 +7,23 @@ import java.util.Hashtable;
 public class AguitaTable <K,T>{
 
 	public final static int STARTED_SIZE=100;
-	private double tableSize;
+	private int tableSize;
 	private T [] hashTable;
-	private K [] hastTableKeys;
+	private K [] hashTableKeys;
 	private double numberOfKeysUsed;
 	private K classKeys;
+	private T classElement;
 	
 	//private T [] reHashing;
 	
 	public AguitaTable(Class <K> keys,Class <T> element) {
 		
 		hashTable = (T[]) Array.newInstance( element , STARTED_SIZE );
-		hastTableKeys = (K[]) Array.newInstance( keys , STARTED_SIZE );
+		hashTableKeys = (K[]) Array.newInstance( keys , STARTED_SIZE );
 	    numberOfKeysUsed=0;
 		tableSize=STARTED_SIZE;
 		classKeys=(K) keys;
-		
+		classElement=(T) element;
 	}
 	
 	public int hash(int k) {
@@ -39,12 +40,12 @@ public class AguitaTable <K,T>{
 		
 		if(hashTable[keyL]==null) {
 			hashTable[keyL]=element;
+			hashTableKeys[keyL]=key; 
 			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
-			putR(element,keyL+1);
-			numberOfKeysUsed++;
+			putR(element,keyL+1,key);
 		}
 		
 		if(numberOfKeysUsed/tableSize>0.50) {
@@ -53,16 +54,18 @@ public class AguitaTable <K,T>{
 		
 	}
 	
-	public void putR(T element,int k) {
+	public void putR(T element,int k,K key) {
 		
-		int key=realValue(k);
+		int keyL=realValue(k);
 		
-		if(hashTable[key]==null) {
-			hashTable[key]=element;
+		if(hashTable[keyL]==null) {
+			hashTable[keyL]=element;
+			hashTableKeys[keyL]=key;
+			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
-			putR(element,key+1);
+			putR(element,keyL+1,key);
 		}
 		
 	}
@@ -77,12 +80,17 @@ public class AguitaTable <K,T>{
 		
 		//Hashtable<Integer,String> ht = new Hashtable<Integer,String>();
 		
-		//T [] newarray = (T[]) Array.newInstance( **** , tableSize*3 );
+		K [] newArrayKeys = (K[]) Array.newInstance( classKeys , tableSize*3 );
+		T [] newArrayElements = (T[]) Array.newInstance( classElement , tableSize*3 );
+		
+		int newTableSize=tableSize*3;
 		
 		for(int i=0;i<hashTable.length;i++) {
-			if(hashTable[i]!=null) {
+			if(hashTableKeys[i]!=null) {
 				
-				// y aqui como le pido la key???
+				K key = hashTableKeys[i];
+				T element = get(key);
+				
 				
 			}
 		}
@@ -136,6 +144,9 @@ public class AguitaTable <K,T>{
 			
 			if(hashTable[position].equals(key)) {
 				value=hashTable[position];
+				hashTable[position]=null;
+				hashTableKeys[position]=null;
+				numberOfKeysUsed--;
 			}
 			//hubo colision
 			else {
@@ -157,6 +168,7 @@ public class AguitaTable <K,T>{
 		if(hashTable[posi].equals(key)) {
 			T valor=hashTable[posi];
 			hashTable[posi]=null;
+			hashTableKeys[posi]=null;
 			numberOfKeysUsed--;
 			return valor;
 		}
