@@ -9,15 +9,19 @@ public class AguitaTable <K,T>{
 	public final static int STARTED_SIZE=100;
 	private double tableSize;
 	private T [] hashTable;
+	private K [] hastTableKeys;
 	private double numberOfKeysUsed;
+	private K classKeys;
 	
 	//private T [] reHashing;
 	
-	public AguitaTable(Class <T> element) {
+	public AguitaTable(Class <K> keys,Class <T> element) {
 		
 		hashTable = (T[]) Array.newInstance( element , STARTED_SIZE );
+		hastTableKeys = (K[]) Array.newInstance( keys , STARTED_SIZE );
 	    numberOfKeysUsed=0;
 		tableSize=STARTED_SIZE;
+		classKeys=(K) keys;
 		
 	}
 	
@@ -31,15 +35,15 @@ public class AguitaTable <K,T>{
 	
 	public void put(K key,T element) {
 		
-		int key = hash( key.hashCode());
+		int keyL = hash( key.hashCode());
 		
-		if(hashTable[key]==null) {
-			hashTable[key]=element;
+		if(hashTable[keyL]==null) {
+			hashTable[keyL]=element;
 			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
-			putR(element,key+1);
+			putR(element,keyL+1);
 			numberOfKeysUsed++;
 		}
 		
