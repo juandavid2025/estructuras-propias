@@ -8,22 +8,18 @@ public class AguitaTable <K,T>{
 
 	public final static int STARTED_SIZE=100;
 	private int tableSize;
-	private T [] hashTable;
-	private K [] hashTableKeys;
+	private HashTableNode<K,T> [] hashTable;
 	private double numberOfKeysUsed;
-	private K classKeys;
-	private T classElement;
+	
 	
 	//private T [] reHashing;
 	
-	public AguitaTable(Class <K> keys,Class <T> element) {
+	public AguitaTable() {
 		
-		hashTable = (T[]) Array.newInstance( element , STARTED_SIZE );
-		hashTableKeys = (K[]) Array.newInstance( keys , STARTED_SIZE );
+		hashTable = Array.newInstance( HashTableNode<K,T> , STARTED_SIZE );
 	    numberOfKeysUsed=0;
 		tableSize=STARTED_SIZE;
-		classKeys=(K) keys;
-		classElement=(T) element;
+		
 	}
 	
 	public int hash(int k) {
@@ -36,16 +32,17 @@ public class AguitaTable <K,T>{
 	
 	public void put(K key,T element) {
 		
-		int keyL = hash( key.hashCode());
+		HashTableNode<K,T> node=new HashTableNode<K,T>(key,element);
+		
+		int keyL = hash( node.getKey().hashCode());
 		
 		if(hashTable[keyL]==null) {
-			hashTable[keyL]=element;
-			hashTableKeys[keyL]=key; 
+			hashTable[keyL]=node; 
 			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
-			putR(element,keyL+1,key);
+			putR(node,keyL+1);
 		}
 		
 		if(numberOfKeysUsed/tableSize>0.50) {
@@ -54,18 +51,17 @@ public class AguitaTable <K,T>{
 		
 	}
 	
-	public void putR(T element,int k,K key) {
+	public void putR(HashTableNode<K,T> node,int k) {
 		
-		int keyL=realValue(k);
+		int position=realValue(k);
 		
-		if(hashTable[keyL]==null) {
-			hashTable[keyL]=element;
-			hashTableKeys[keyL]=key;
+		if(hashTable[position]==null) {
+			hashTable[position]=node;
 			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
-			putR(element,keyL+1,key);
+			putR(node,position+1);
 		}
 		
 	}
@@ -80,19 +76,21 @@ public class AguitaTable <K,T>{
 		
 		//Hashtable<Integer,String> ht = new Hashtable<Integer,String>();
 		
-		K [] newArrayKeys = (K[]) Array.newInstance( classKeys , tableSize*3 );
-		T [] newArrayElements = (T[]) Array.newInstance( classElement , tableSize*3 );
+		tableSize=tableSize*3;
+		numberOfKeysUsed=0;
 		
-		int newTableSize=tableSize*3;
+		HashTableNode<K,T> [] copy = hashTable.clone();
 		
-		for(int i=0;i<hashTable.length;i++) {
-			if(hashTableKeys[i]!=null) {
+		hashTable = Array.newInstance(HashTableNode<K,T>, tableSize);
+		
+		for(int i=0;i<copy.length;i++) {
+			
+			if(copy[i]!=null) {
 				
-				K key = hashTableKeys[i];
-				T element = get(key);
-				
+				put(copy[i].getKey(),copy[i].getElement());
 				
 			}
+			
 		}
 	}
 	
@@ -109,8 +107,8 @@ public class AguitaTable <K,T>{
 		
 		if(numberOfKeysUsed!=0) {
 			int position=hash(key.hashCode());
-			if(hashTable[position].equals(key)) {
-				value=hashTable[position];
+			if(hashTable[position].getKey().equals(key)) {
+				value=hashTable[position].getElement();
 			}
 			//hubo colision
 			else {
@@ -124,12 +122,17 @@ public class AguitaTable <K,T>{
 	public T getR(int position,K key) {
 		
 		int posi=realValue(position);
+	
+	if(hashTable[posi]!=null) {
 		
-		if(hashTable[posi].equals(key)) {
-			return hashTable[posi];
+		if(hashTable[posi].getKey().equals(key)) {
+			return hashTable[posi].getElement();
 		}
 		else {
 			return getR(position+1,key);
+		  }
+		}else {
+			return null;
 		}
 	}
 	
@@ -142,10 +145,9 @@ public class AguitaTable <K,T>{
 		
 			if(hashTable[position]!=null) {
 			
-			if(hashTable[position].equals(key)) {
-				value=hashTable[position];
+			if(hashTable[position].getKey().equals(key)) {
+				value=hashTable[position].getElement();
 				hashTable[position]=null;
-				hashTableKeys[position]=null;
 				numberOfKeysUsed--;
 			}
 			//hubo colision
@@ -165,16 +167,17 @@ public class AguitaTable <K,T>{
 		
 		if(hashTable[posi]!=null) {
 
-		if(hashTable[posi].equals(key)) {
-			T valor=hashTable[posi];
+		if(hashTable[posi].getKey().equals(key)) {
+			T valor=hashTable[posi].getElement();
 			hashTable[posi]=null;
-			hashTableKeys[posi]=null;
 			numberOfKeysUsed--;
 			return valor;
 		}
+		
 		else {
 			return getR(position+1,key);
-		}
+			}
+		
 		}else {
 			return null;
 		}
