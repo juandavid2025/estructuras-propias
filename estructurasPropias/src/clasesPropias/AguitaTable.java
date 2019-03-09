@@ -1,8 +1,5 @@
 package clasesPropias;
 
-import java.lang.reflect.Array;
-import java.util.Hashtable;
-
 //falta re hashing
 public class AguitaTable <K,T>{
 
@@ -16,7 +13,7 @@ public class AguitaTable <K,T>{
 	
 	public AguitaTable() {
 		
-		hashTable = Array.newInstance( HashTableNode<K,T> , STARTED_SIZE );
+		hashTable =new HashTableNode[STARTED_SIZE];
 	    numberOfKeysUsed=0;
 		tableSize=STARTED_SIZE;
 		
@@ -81,7 +78,7 @@ public class AguitaTable <K,T>{
 		
 		HashTableNode<K,T> [] copy = hashTable.clone();
 		
-		hashTable = Array.newInstance(HashTableNode<K,T>, tableSize);
+		hashTable = new HashTableNode[tableSize];
 		
 		for(int i=0;i<copy.length;i++) {
 			
@@ -108,7 +105,7 @@ public class AguitaTable <K,T>{
 		if(numberOfKeysUsed!=0) {
 			int position=hash(key.hashCode());
 			if(hashTable[position].getKey().equals(key)) {
-				value=hashTable[position].getElement();
+				value=(T) hashTable[position].getElement();
 			}
 			//hubo colision
 			else {
@@ -126,7 +123,7 @@ public class AguitaTable <K,T>{
 	if(hashTable[posi]!=null) {
 		
 		if(hashTable[posi].getKey().equals(key)) {
-			return hashTable[posi].getElement();
+			return (T) hashTable[posi].getElement();
 		}
 		else {
 			return getR(position+1,key);
@@ -146,7 +143,7 @@ public class AguitaTable <K,T>{
 			if(hashTable[position]!=null) {
 			
 			if(hashTable[position].getKey().equals(key)) {
-				value=hashTable[position].getElement();
+				value=(T) hashTable[position].getElement();
 				hashTable[position]=null;
 				numberOfKeysUsed--;
 			}
@@ -168,7 +165,7 @@ public class AguitaTable <K,T>{
 		if(hashTable[posi]!=null) {
 
 		if(hashTable[posi].getKey().equals(key)) {
-			T valor=hashTable[posi].getElement();
+			T valor=(T) hashTable[posi].getElement();
 			hashTable[posi]=null;
 			numberOfKeysUsed--;
 			return valor;
