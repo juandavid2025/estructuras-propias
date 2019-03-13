@@ -1,31 +1,34 @@
 package estrategias;
 
+import clasesPropias.AguitaTable;
+
 public class Cerro {
 
-	private long totalStairs;
+	private AguitaTable<Integer,Integer> table;
 	
-	public long alternatives(long stairs) {
-		long options=0;
-		
-		totalStairs=stairs;
-		
-		return options;
+	public Cerro() {
+		table= new AguitaTable<Integer,Integer>();
 	}
 	
-	public long alternativesR(long sum,long stairsRisen, long a, long b) {
-		long result=0;
+	public long fibonachi(long n){
 		
-		if(stairsRisen==totalStairs) {
-			result+= 0;
-		}
-		else if(sum>stairsRisen) {
-			result-= 1;
+		if(n==1) {
+			return 1;
 		}
 		else {
-			
-			result += alternativesR(sum+a+b,stairsRisen+3,b,a+b);
+			return fibonachi(n-1) + fibonachi(n-2);
 		}
 		
-		return result;
+	}
+	
+public long fibonachiDinamico(long n){
+		
+		if(n==1) {
+			return 1;
+		}
+		else {
+			return fibonachi(n-1) + fibonachi(n-2);
+		}
+		
 	}
 }
