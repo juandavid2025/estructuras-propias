@@ -21,10 +21,12 @@ public class AguitaTable <K,T>{
 	
 	public int hash(int k) {
 	
+		/**
 		double A = (Math.sqrt(5)+1)/2d;
 		int hash = (int) (tableSize*(Math.floor((k*A)%1.0)));
 		return hash;
-		
+		*/
+		return k%tableSize;
 	}
 	
 	public void put(K key,T element) {
@@ -34,15 +36,19 @@ public class AguitaTable <K,T>{
 		int keyL = hash( node.getKey().hashCode());
 		
 		if(hashTable[keyL]==null) {
+			
 			hashTable[keyL]=node; 
 			numberOfKeysUsed++;
 		}
 		// colision 
 		else {
+			
 			putR(node,keyL+1);
 		}
 		
 		if(numberOfKeysUsed/tableSize>0.50) {
+			System.out.println("rehashing");
+			
 			reHashing();
 		}
 		
@@ -104,12 +110,17 @@ public class AguitaTable <K,T>{
 		
 		if(numberOfKeysUsed!=0) {
 			int position=hash(key.hashCode());
+			
+			if(hashTable[position]!=null) {
+				
 			if(hashTable[position].getKey().equals(key)) {
 				value=(T) hashTable[position].getElement();
 			}
 			//hubo colision
 			else {
 				value= getR(position+1,key);
+			 }
+			
 			}
 		}
 		
@@ -139,7 +150,7 @@ public class AguitaTable <K,T>{
 		
 		if(numberOfKeysUsed!=0) {
 			int position=hash(key.hashCode());
-		
+			
 			if(hashTable[position]!=null) {
 			
 			if(hashTable[position].getKey().equals(key)) {
@@ -150,8 +161,8 @@ public class AguitaTable <K,T>{
 			//hubo colision
 			else {
 				value= removeR(position+1,key);
+			  }
 			}
-		}
 	}
 		
 		return value;
