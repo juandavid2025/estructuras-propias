@@ -1,5 +1,12 @@
 package practico;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 //falta re hashing
 public class AguitaTable <K,T>{
 
@@ -52,7 +59,7 @@ public class AguitaTable <K,T>{
 		
 	}
 	
-	public void putR(HashTableNode<K,T> node,int k) {
+	private void putR(HashTableNode<K,T> node,int k) {
 		
 		int position=realValue(k);
 		
@@ -125,7 +132,7 @@ public class AguitaTable <K,T>{
 		return value;
 	}
 	
-	public T getR(int position,K key) {
+	private T getR(int position,K key) {
 		
 		int posi=realValue(position);
 	
@@ -167,7 +174,7 @@ public class AguitaTable <K,T>{
 		
 	}
 	
-	public T removeR(int position,K key) {
+	private T removeR(int position,K key) {
     
 		int posi=realValue(position);
 		
@@ -189,16 +196,47 @@ public class AguitaTable <K,T>{
 		}
 	}
 	
-	/**
+	
 	public boolean contains(K key) {
 		boolean found=false;
 		
-		
+		if(get(key)!=null) {
+		found=true;	
+		}
 		
 		return found;
 	}
+	
+	/**
+    public void read() {
+    	
+    	File file = new File("NameOFTheFile.txt");
+    	
+    	String fileName = file.getName();
+    	
+    	if(fileName.contains(".txt ")) {
+    		
+    		FileInputStream fis;
+			try {
+				
+				fis = new FileInputStream(file);
+				BufferedReader buff = new BufferedReader(new InputStreamReader(fis));
+			
+				// leer la linea
+			    buff.readLine();
+				
+
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+    	}
+    }
 	*/
-	
-	
 	
 }
