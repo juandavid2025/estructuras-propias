@@ -1,13 +1,12 @@
+package avl;
 
-package clasesUsoNormal;
+public class OwnAVL<K extends Comparable<K>,T>{
 
-public class OwnBST <K extends Comparable<K>,T>{
-
-	public BSTNode<K,T> root;
+	public AVLNode<K,T> root;
 	
-	public void insert(K key,T element) {
+public void insert(K key,T element) {
 		
-		BSTNode<K,T> newNode = new BSTNode<K,T>(key,element);
+		AVLNode<K,T> newNode = new AVLNode<K,T>(key,element);
 		
 		if(root == null) {
 			
@@ -22,7 +21,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		}
 	}
 	
-	private void insertR(BSTNode<K,T> current,BSTNode<K,T> newNode) {
+	private void insertR(AVLNode<K,T> current,AVLNode<K,T> newNode) {
 		
 		if(current.compareTo(newNode.getKey())<0) {
 			if(current.getRight()==null) {
@@ -53,7 +52,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		
 		if(root!=null) {
 			
-			BSTNode<K,T> toDelete = getNode(key);
+			AVLNode<K,T> toDelete = getNode(key);
 			
 		     if(toDelete==root) {
 		    	 //borrar raiz
@@ -67,7 +66,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		     }
 		     else {
 		    	 if(toDelete.getIsRightSon()) {
-		    		 BSTNode<K,T> temp = toDelete.deleteR();
+		    		 AVLNode<K,T> temp = toDelete.deleteR();
 		    		 if(temp!=null) {
 		    		 temp.setRightSon(true);
 		    		 temp.setFather(toDelete.getFather());
@@ -75,7 +74,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		    		 toDelete.getFather().setRight(temp);
 		    	 }
 		    	 else {
-		    		 BSTNode<K,T> temp = toDelete.deleteR();
+		    		 AVLNode<K,T> temp = toDelete.deleteR();
 		    		 if(temp!=null) {
 		    		 temp.setRightSon(false);
 		    		 temp.setFather(toDelete.getFather());
@@ -89,34 +88,34 @@ public class OwnBST <K extends Comparable<K>,T>{
 		
 	}
 	
-	private BSTNode<K,T> getNode(K key) {
+	private AVLNode<K,T> getNode(K key) {
 		
 		return getNodeR(root,key);
 				
 	}
 	
-	private BSTNode<K,T> getNodeR(BSTNode<K,T> node, K key){
+	private AVLNode<K,T> getNodeR(AVLNode<K,T> node, K key){
 		
-		BSTNode<K,T> bstNode = null; 
+		AVLNode<K,T> AVLNode = null; 
 		
 		if(node!=null) {
 			
 			if(node.compareTo(key)==0) {
-				bstNode=node;
+				AVLNode=node;
 			}
 			else if(node.compareTo(key)<0) {
 				
-				bstNode = getNodeR(node.getRight(),key);
+				AVLNode = getNodeR(node.getRight(),key);
 				
 			}else {
 				
-				bstNode = getNodeR(node.getLeft(),key);
+				AVLNode = getNodeR(node.getLeft(),key);
 				
 			}
 			
 		}
 		
-		return bstNode;
+		return AVLNode;
 		
 	}
 	
@@ -130,7 +129,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return found;
 	}
 	
-	private T searchR(BSTNode<K,T> node, K key) {
+	private T searchR(AVLNode<K,T> node, K key) {
 		T found=null;
 		
 		if(node!=null) {
@@ -170,7 +169,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return in;
 	}
 	
-	private String inOrderR(BSTNode<K,T> current) {
+	private String inOrderR(AVLNode<K,T> current) {
 		String in = "";
 		
 		if(current!=null) {
@@ -192,7 +191,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return pre;
 	}
 	
-	private String preOrderR(BSTNode<K,T> current) {
+	private String preOrderR(AVLNode<K,T> current) {
 		
         String pre = "";
 		
@@ -219,7 +218,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		
 	}
 	
-	public String postOrderR(BSTNode<K,T> current) {
+	public String postOrderR(AVLNode<K,T> current) {
 		
         String pos = "";
 		
@@ -232,6 +231,22 @@ public class OwnBST <K extends Comparable<K>,T>{
 		}
 		
 		return pos;
+		
+	}
+	
+	public void checkTree(AVLNode<K,T> start) {
+		
+		start.setCharge(0);
+		checkTreeR(start.getFather());
+	}
+	
+	public void checkTreeR(AVLNode<K,T> current) {
+		
+		
+		
+	}
+	
+	public void fix() {
 		
 	}
 	

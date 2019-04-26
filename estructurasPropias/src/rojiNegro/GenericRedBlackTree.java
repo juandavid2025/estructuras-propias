@@ -1,18 +1,19 @@
+ package rojiNegro;
 
-package clasesUsoNormal;
+import clasesUsoNormal.BSTNode;
 
-public class OwnBST <K extends Comparable<K>,T>{
+public class GenericRedBlackTree <K extends Comparable<K>,T>{
 
-	public BSTNode<K,T> root;
+	private RBTreeNode<K,T> root;
 	
 	public void insert(K key,T element) {
 		
-		BSTNode<K,T> newNode = new BSTNode<K,T>(key,element);
+		RBTreeNode<K,T> newNode = new RBTreeNode<K,T>(key,element);
 		
 		if(root == null) {
 			
 			// la raiz es nula
-			
+			newNode.setRed(false); 
 			root = newNode;
 		}
 		else {
@@ -22,13 +23,14 @@ public class OwnBST <K extends Comparable<K>,T>{
 		}
 	}
 	
-	private void insertR(BSTNode<K,T> current,BSTNode<K,T> newNode) {
+	private void insertR(RBTreeNode<K,T> current,RBTreeNode<K,T> newNode) {
 		
 		if(current.compareTo(newNode.getKey())<0) {
 			if(current.getRight()==null) {
 				newNode.setFather(current);
-				newNode.setRightSon(true);
+				newNode.setIsRightSon(true);
 				current.setRight(newNode);
+				fixUpInsertion(newNode);
 			}
 			else {
 				insertR(current.getRight(),newNode);
@@ -37,8 +39,9 @@ public class OwnBST <K extends Comparable<K>,T>{
 		else {
 			if(current.getLeft()==null) {
 				newNode.setFather(current);
-				newNode.setRightSon(false);
+				newNode.setIsRightSon(false);
 				current.setLeft(newNode);
+				fixUpInsertion(newNode);
 			}
 			else {
 				insertR(current.getLeft(),newNode);
@@ -47,57 +50,87 @@ public class OwnBST <K extends Comparable<K>,T>{
 		
 	}
 	
+	private void fixUpInsertion(RBTreeNode<K,T> newNode) {
+		
+		//caso2 --  papa rojo
+		if (newNode.getFather().isRed()) {
+			
+			RBTreeNode<K,T> uncle = newNode.getUncle();
+			if(uncle==null) {
+				// papa rojo , tio negro nulo
+				
+				//caso linea
+				if(newNode.getIsRightSon() && newNode.getFather().getIsRightSon()) {
+					//linea confirmed
+					
+					
+					
+				}else if(!newNode.getIsRightSon() && !newNode.getFather().getIsRightSon()) {
+					
+					//linea confirmed
+					
+				}
+				else {
+					//triangulo
+				}
+				
+			}
+			else {
+				
+				if(uncle.isRed()) {
+					//papa rojo , tio rojo
+					
+					newNode.getFather().setRed(false);
+					uncle.setRed(false);
+					newNode.getFather().getFather().setRed(true);
+					fixUpInsertion(newNode.getFather().getFather());
+					
+				}else {
+					//papa rojo, tio negro
+					
+					
+				}
+				
+			}
+			
+			
+		}
+		//papa negro - no hago nada 
+	}
+	
 	public void delete(K key) {
 		
 		//*******
 		
 		if(root!=null) {
 			
-			BSTNode<K,T> toDelete = getNode(key);
+			RBTreeNode<K,T> toDelete = getNode(key);
 			
-		     if(toDelete==root) {
-		    	 //borrar raiz
-		    	 
-		    	root = root.deleteR();
-		    	if(root!=null) {
-		    	root.setFather(null);
-		    	}
-		    	 
-		    	 //borrar raiz
-		     }
-		     else {
-		    	 if(toDelete.getIsRightSon()) {
-		    		 BSTNode<K,T> temp = toDelete.deleteR();
-		    		 if(temp!=null) {
-		    		 temp.setRightSon(true);
-		    		 temp.setFather(toDelete.getFather());
-		    		 }
-		    		 toDelete.getFather().setRight(temp);
-		    	 }
-		    	 else {
-		    		 BSTNode<K,T> temp = toDelete.deleteR();
-		    		 if(temp!=null) {
-		    		 temp.setRightSon(false);
-		    		 temp.setFather(toDelete.getFather());
-		    		 }
-		    		 toDelete.getFather().setLeft(temp);
-		    	 }
-		    	 
-		     }
-		
-		}	
+			if(toDelete==root) {
+				
+				
+				
+			}
+			
+			else if(toDelete.leaf()) {
+				
+				
+				
+			}
+			
+		}
 		
 	}
 	
-	private BSTNode<K,T> getNode(K key) {
+	private RBTreeNode<K,T> getNode(K key) {
 		
 		return getNodeR(root,key);
 				
 	}
 	
-	private BSTNode<K,T> getNodeR(BSTNode<K,T> node, K key){
+	private RBTreeNode<K,T> getNodeR(RBTreeNode<K,T> node, K key){
 		
-		BSTNode<K,T> bstNode = null; 
+		RBTreeNode<K,T> bstNode = null; 
 		
 		if(node!=null) {
 			
@@ -130,7 +163,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return found;
 	}
 	
-	private T searchR(BSTNode<K,T> node, K key) {
+	private T searchR(RBTreeNode<K,T> node, K key) {
 		T found=null;
 		
 		if(node!=null) {
@@ -170,7 +203,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return in;
 	}
 	
-	private String inOrderR(BSTNode<K,T> current) {
+	private String inOrderR(RBTreeNode<K,T> current) {
 		String in = "";
 		
 		if(current!=null) {
@@ -192,7 +225,7 @@ public class OwnBST <K extends Comparable<K>,T>{
 		return pre;
 	}
 	
-	private String preOrderR(BSTNode<K,T> current) {
+	private String preOrderR(RBTreeNode<K,T> current) {
 		
         String pre = "";
 		
@@ -219,14 +252,14 @@ public class OwnBST <K extends Comparable<K>,T>{
 		
 	}
 	
-	public String postOrderR(BSTNode<K,T> current) {
+	public String postOrderR(RBTreeNode<K,T> current) {
 		
         String pos = "";
 		
 		if(current!=null) {
 			
-			pos+=preOrderR(current.getLeft());
-			pos+=preOrderR(current.getRight());
+			pos+=postOrderR(current.getLeft());
+			pos+=postOrderR(current.getRight());
 			pos+=current.getElement();
 			
 		}

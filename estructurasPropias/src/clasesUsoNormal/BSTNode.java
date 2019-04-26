@@ -4,13 +4,31 @@ public class BSTNode <K extends Comparable<K>,T>{
 
    private K key;
    private T element;
+   private BSTNode<K,T> father;
    private BSTNode<K,T> right;
    private BSTNode<K,T> left;
+   private boolean isRightSon;
    
    public BSTNode(K key,T element) {
 	   this.key=key;
 	   this.element=element;
    }
+   
+   public void setRightSon(boolean value) {
+	   isRightSon=value;
+   }
+   
+   public boolean getIsRightSon() {
+	   return isRightSon;
+   }
+   
+   public void setFather(BSTNode<K,T> father) {
+	   this.father=father;
+   }
+   
+   public BSTNode<K,T> getFather(){
+	   return father;
+   } 
    
    public K getKey() {
 	return key;
@@ -60,34 +78,54 @@ public int compareTo(K k) {
 	
 }
 
+   public BSTNode<K,T> deleteR(){
+	   
+	   if(leaf()) {
+		   return null;
+	   }
+	   
+	   if(right==null) {
+		   return left;
+	   }
+	   else if(left==null) {
+		   return right;
+	   }
+	   else {
+		   //tiene los dos hijos
+		   
+		   BSTNode<K,T> sucesor = minValue(right);
+		   
+		   if(sucesor!=right && sucesor != left) {
+			   if(sucesor.isRightSon) {
+				   BSTNode<K,T> temp = sucesor.deleteR();
+				   temp.setRightSon(true);
+				   sucesor.getFather().setRight(temp);
+			   }
+			   else {
+				   BSTNode<K,T> temp = sucesor.deleteR();
+				   temp.setRightSon(false);
+				   sucesor.getFather().setLeft(temp); 
+			   }
+		   }
+		   else {
+			   sucesor.setLeft(left);
+		   }
+		   
+		   return sucesor;
+	   }
+	   
+   }
+   
    public BSTNode<K,T> minValue(BSTNode<K,T> current) {
 	   return current.getLeft()==null?current:minValue(current.getLeft());
    }
-   
-   public BSTNode<K,T> deleteR(BSTNode<K,T> root, K key) {
-	   
-	   if(root==null) {
-		   return root;
+
+   public boolean leaf() {
+	   if(right==null && left==null) {
+		   return true;
+	   }else {
+		   return false;
 	   }
-	   if(root.compareTo(key)>0) {
-		   root.left=deleteR(root.left,key);
-	   }
-	   else if(root.compareTo(key)<0) {
-		   root.right=deleteR(root.right,key);
-	   }
-	   else {
-		   
-		   if(root.left==null) {
-			   return root.right;
-		   }
-		   else if(root.right==null) {
-			   return root.left;
-		   }
-		   
-		   root.key=minValue(root.right).getKey();
-		   root.right= deleteR(root.right,root.key);
-	   }
-	   return root;
    }
 	
 }
